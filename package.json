@@ -1,0 +1,25 @@
+{
+  "name": "rest_api",
+  "version": "1.0.0",
+  "description": "RESTFull API using NodeJS, Express and MongoDB",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "watch": "nodemon"
+  },
+  "keywords": [
+    "nodejs",
+    "mongo",
+    "express"
+  ],
+  "author": "Osvaldo Vega A",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "mongoose": "^4.8.6"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}
