@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-// Store schema
+// PARTS SCHEMA - MODEL
 const partsSchema = mongoose.Schema({
   section:{
     type: String,
@@ -37,6 +37,8 @@ const partsSchema = mongoose.Schema({
 });
 
 const Parts = module.exports = mongoose.model('Parts', partsSchema);
+
+// MONGODB FUNCTIONS - PARTS SCHEMA
 
 // Get Parts
 module.exports.getAllParts = function(cb, limit) {
