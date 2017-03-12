@@ -1,21 +1,21 @@
 const express   = require('express');
 const router    = express.Router();
-const Parts     = require('./../models/parts');
+const Users     = require('./../models/users');
 
-// GET - All parts
-router.get('/parts', (req, res) => {
-  Parts.getAllParts((err, parts) => {
+// GET - All users
+router.get('/users', (req, res) => {
+  Users.getAllUsers((err, users) => {
     if(err) {
       res.status(400)
       res.send(err)
     }
-    res.json(parts);
+    res.json(users);
   });
 });
 
-// GET -  Specific part by ID
-router.get('/parts/:_id', (req, res) => {
-  Parts.getPartById(req.params._id, (err, part) => {
+// GET -  Specific user by ID
+router.get('/users/:_id', (req, res) => {
+  Users.getUserById(req.params._id, (err, part) => {
     if(err) {
       res.status(400)
       res.send(err)
@@ -24,10 +24,10 @@ router.get('/parts/:_id', (req, res) => {
   });
 });
 
-// ADD - Add a new part
-router.post('/parts', (req, res) => {
+// ADD - Add a new user
+router.post('/users', (req, res) => {
   const newPart = req.body;
-  Parts.addPart(newPart, (err, part) => {
+  Users.addUser(newPart, (err, part) => {
     if(err) {
       res.status(400)
       res.send(err)
@@ -36,11 +36,11 @@ router.post('/parts', (req, res) => {
   });
 });
 
-// UPDATE - Update a existing part by ID
-router.put('/parts/:_id', (req, res) => {
+// UPDATE - Update a existing user by ID
+router.put('/users/:_id', (req, res) => {
   const id = req.params._id;
   const part = req.body;
-  Parts.updatePart(id, part, {}, (err, part) => {
+  Users.updateUser(id, part, {}, (err, part) => {
     if(err) {
       res.status(400)
       res.send(err)
@@ -49,10 +49,10 @@ router.put('/parts/:_id', (req, res) => {
   });
 });
 
-// DELETE - Delete a part by ID
-router.delete('/parts/:_id', (req, res) => {
+// DELETE - Delete am user by ID
+router.delete('/users/:_id', (req, res) => {
   const id = req.params._id;
-  Parts.deletePart(id, (err, part) => {
+  Users.deleteUser(id, (err, part) => {
     if(err) {
       res.status(400)
       res.send(err)
