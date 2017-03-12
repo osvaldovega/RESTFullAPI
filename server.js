@@ -1,23 +1,23 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const Parts = require('./models/store');
+const express     = require('express');
+const bodyParser  = require('body-parser');
+const mongoose    = require('mongoose');
+const Parts       = require('./models/parts');
+const config      = require('./config/database');
+const app         = express();
+const port        = 3000;
 
-const app = express();
-const port = 3000;
-const mongodb_URL = 'mongodb://localhost/store';
-
-//Connect to Mongo DB - (store)
-mongoose.connect(mongodb_URL);
+// Connect to Mongo DB - (store)
+mongoose.connect(config.database);
 const DB = mongoose.connection;
 
+// Express
 app.use(bodyParser.json());
 
 
-/*----------------------- FUNCTIONS ---------------------------------------*/
+/*----------------------- ROUTES ---------------------------------------*/
 // ROOT URL
 app.get('/', (req, res) => {
-  res.send('Use /api/parts');
+  res.send('Welcome to Express API...');
 });
 
 
@@ -78,4 +78,4 @@ app.delete('/api/parts/:_id', (req, res) => {
 /*----------------------- END ---------------------------------------*/
 
 app.listen(port);
-console.log(`Server is up and running...\nPort: ${port}`);
+console.log(`Server is up and running...\nPort: ${port}\nURL: localhost:${port}/`);
