@@ -1,64 +1,64 @@
-const express   = require('express');
-const router    = express.Router();
-const Users     = require('./../models/users');
+const Users = require('../models/Users');
 
-// GET - All users
-router.get('/users', (req, res) => {
-  Users.getAllUsers((err, users) => {
-    if(err) {
-      res.status(400)
-      res.send(err)
-    }
-    res.json(users);
-  });
-});
+module.exports = {
 
-// GET -  Specific user by ID
-router.get('/users/:_id', (req, res) => {
-  Users.getUserById(req.params._id, (err, part) => {
-    if(err) {
-      res.status(400)
-      res.send(err)
-    }
-    res.json(part);
-  });
-});
+  // Get ALL the users
+  find: function(params, callback) {
+    Users.find(params, function(err, user) {
+      if(err) {
+        callback(err, null);
+        return;
+      }
 
-// ADD - Add a new user
-router.post('/users', (req, res) => {
-  const newPart = req.body;
-  Users.addUser(newPart, (err, part) => {
-    if(err) {
-      res.status(400)
-      res.send(err)
-    }
-    res.json(part);
-  });
-});
+      callback(null, user);
+    });
+  },
 
-// UPDATE - Update a existing user by ID
-router.put('/users/:_id', (req, res) => {
-  const id = req.params._id;
-  const part = req.body;
-  Users.updateUser(id, part, {}, (err, part) => {
-    if(err) {
-      res.status(400)
-      res.send(err)
-    }
-    res.json(part);
-  });
-});
+  // Get just ONE user
+  findById: function(id, callback) {
+    Users.findById(id, function(err, user) {
+      if(err) {
+        callback(err, null);
+        return;
+      }
 
-// DELETE - Delete am user by ID
-router.delete('/users/:_id', (req, res) => {
-  const id = req.params._id;
-  Users.deleteUser(id, (err, part) => {
-    if(err) {
-      res.status(400)
-      res.send(err)
-    }
-    res.json(part);
-  });
-});
+      callback(null, user);
+    });
+  },
 
-module.exports = router;
+  // Add a NEW user
+  create: function(params, callback) {
+    Users.create(params, function(err, user) {
+      if(err) {
+        callback(err, null);
+        return;
+      }
+
+      callback(null, user);
+    });
+  },
+
+  // Update an user
+  update: function(id, params, callback) {
+    Users.findByIdAndUpdate(id, params, {new:true}, function(err, part) {
+      if(err) {
+        callback(err, null);
+        return;
+      }
+
+      callback(null, user);
+    });
+  },
+
+  // Delete an user
+  delete: function(id, callback) {
+    Users.findByIdAndRemove(id, function(err, user) {
+      if(err) {
+        callback(err, null);
+        return;
+      }
+
+      callback(null, null);
+    });
+  },
+}

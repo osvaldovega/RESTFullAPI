@@ -17,10 +17,14 @@
   "dependencies": {
     "body-parser": "^1.17.1",
     "express": "^4.15.2",
-    "mongoose": "^4.8.6",
-    "pug": "^2.0.0-beta11"
+    "mongoose": "^4.8.6"
   },
   "devDependencies": {
-    "nodemon": "^1.11.0"
+    "cookie-parser": "^1.4.3",
+    "debug": "^2.6.3",
+    "hjs": "0.0.6",
+    "morgan": "^1.8.1",
+    "nodemon": "^1.11.0",
+    "serve-favicon": "^2.4.1"
   }
 }

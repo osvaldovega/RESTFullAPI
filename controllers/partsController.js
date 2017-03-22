@@ -1,64 +1,80 @@
-const express   = require('express');
-const router    = express.Router();
-const Parts     = require('./../models/parts');
+const Parts = require('../models/Parts');
 
-// GET - All parts
-router.get('/parts', (req, res) => {
-  Parts.getAllParts((err, parts) => {
-    if(err) {
-      res.status(400)
-      res.send(err)
-    }
-    res.json(parts);
-  });
-});
+module.exports = {
 
-// GET -  Specific part by ID
-router.get('/parts/:_id', (req, res) => {
-  Parts.getPartById(req.params._id, (err, part) => {
-    if(err) {
-      res.status(400)
-      res.send(err)
-    }
-    res.json(part);
-  });
-});
+  // Get ALL the parts
+  find: function(params, callback) {
+    Parts.find(params, function(err, parts) {
+      if(err) {
+        callback(err, null);
+        return;
+      }
 
-// ADD - Add a new part
-router.post('/parts', (req, res) => {
-  const newPart = req.body;
-  Parts.addPart(newPart, (err, part) => {
-    if(err) {
-      res.status(400)
-      res.send(err)
-    }
-    res.json(part);
-  });
-});
+      callback(null, parts);
+    });
+  },
 
-// UPDATE - Update a existing part by ID
-router.put('/parts/:_id', (req, res) => {
-  const id = req.params._id;
-  const part = req.body;
-  Parts.updatePart(id, part, {}, (err, part) => {
-    if(err) {
-      res.status(400)
-      res.send(err)
-    }
-    res.json(part);
-  });
-});
+  // Get just ONE part
+  findById: function(id, callback) {
+    Parts.findById(id, function(err, part) {
+      if(err) {
+        callback(err, null);
+        return;
+      }
 
-// DELETE - Delete a part by ID
-router.delete('/parts/:_id', (req, res) => {
-  const id = req.params._id;
-  Parts.deletePart(id, (err, part) => {
-    if(err) {
-      res.status(400)
-      res.send(err)
-    }
-    res.json(part);
-  });
-});
+      callback(null, part);
+    });
+  },
 
-module.exports = router;
+  // Add a NEW part
+  create: function(params, callback) {
+    // Convert to Arrays
+    let materialColor = params['material_color'].split(',');
+    let tubeColor = params['tube_color'].split(',');
+    let newMaterialColor = [];
+    let newTubeColor = [];
+
+    materialColor.forEach(function(element) {
+      newMaterialColor.push(element.trim());
+    });
+    tubeColor.forEach(function(element) {
+      newTubeColor.push(element.trim());
+    });
+
+    params['material_color'] = newMaterialColor;
+    params['tube_color'] = newTubeColor;
+
+    Parts.create(params, function(err, part) {
+      if(err) {
+        callback(err, null);
+        return;
+      }
+
+      callback(null, part);
+    });
+  },
+
+  // Update a part
+  update: function(id, params, callback) {
+    Parts.findByIdAndUpdate(id, params, {new:true}, function(err, part) {
+      if(err) {
+        callback(err, null);
+        return;
+      }
+
+      callback(null, part);
+    });
+  },
+
+  // Delete a part
+  delete: function(id, callback) {
+    Parts.findByIdAndRemove(id, function(err, part) {
+      if(err) {
+        callback(err, null);
+        return;
+      }
+
+      callback(null, null);
+    });
+  },
+}

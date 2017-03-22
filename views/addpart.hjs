@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ title }}</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1>Create Part</h1>
+
+    <form action="/api/parts" method="post">
+      <input type="text" name="section" placeholder="Section" />
+      <input type="text" name="title" placeholder="Title" />
+      <input type="text" name="description" placeholder="Description" />
+      <input type="text" name="price" placeholder="Price" />
+      <input type="text" name="image" placeholder="Image" />
+      <input type="text" name="material_color" placeholder="Material color" />
+      <input type="text" name="tube_color" placeholder="Tube color" />
+      <input type="submit" value="Add Part" />
+    </form>
+  </body>
+</html>

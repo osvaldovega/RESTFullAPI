@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{ title }}</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1>Create User</h1>
+
+    <form action="/api/users" method="post">
+      <input type="text" name="username" placeholder="Username" />
+      <input type="text" name="email" placeholder="Email" />
+      <input type="password" name="password" placeholder="Password" />
+      <input type="submit" value="Add User" />
+    </form>
+  </body>
+</html>
