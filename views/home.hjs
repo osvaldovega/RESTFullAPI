@@ -5,7 +5,8 @@
     <title>{{title}}</title>
   </head>
   <body>
-    <h2>{{message}}</h2>
+    <h1>Home</h1>
+    {{message}}
     <a href='/'>Main page</a>
   </body>
 </html>

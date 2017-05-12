@@ -5,9 +5,10 @@ const favicon         = require('serve-favicon');
 const logger          = require('morgan');
 const cookieParser    = require('cookie-parser');
 const mongoose        = require('mongoose');
+const sessions        = require('express-session');
 // Routes
 const index           = require('./routes/index');
-const api           = require('./routes/api');
+const api             = require('./routes/api');
 // Server variables
 const config          = require('./config/config');
 const app             = express();
@@ -33,7 +34,12 @@ app.set('view engine', 'hjs');
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(sessions({
+  secret: '#$/%&sdfsdf4556ASD!#84df&%/',
+  resave: false,
+  saveUninitialized: true
+}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
