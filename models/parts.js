@@ -36,4 +36,4 @@ const partsSchema = new mongoose.Schema({
   }
 });
 
-module.exports = mongoose.model('partsSchema', partsSchema);
+module.exports = mongoose.model('Parts', partsSchema);

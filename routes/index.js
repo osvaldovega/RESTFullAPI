@@ -1,56 +1,46 @@
 const express     = require('express');
 const router      = express.Router();
-const sessions    = require('express-session');
 const controllers = require('../controllers');
 
 /*----------------------- ROUTES ---------------------------------------*/
-// ROOT URL
-router.get('/', function(req, res) {
-  res.render('index', { title: 'RESTFull API - Express' });
-});
 
-router.get('/api', function(req, res) {
-  res.render('index', { title: 'RESTFull API - Express' });
-});
+module.exports = function(passport) {
 
-// GET route to load the add part form
-router.get('/addpart', function(req, res) {
-  res.render('addpart', null);
-});
-
-// GET route to load the user form
-router.get('/adduser', function(req, res) {
-  res.render('adduser', null);
-});
-
-// Login to the API
-router.get('/login', function(req, res) {
-  res.render('login', null);
-});
-
-// Login to the API
-router.post('/login', function(req, res) {
-  const controller = controllers['login'];
-  const user = {
-    username: req.body.username,
-    password: req.body.password
-  };
-
-  controller.findOne(user, function(err, results) {
-    if (err) {
-      res.status(500);
-      return res.render('error', { title:'Error', message:`Error getting data ${err}` });
-    }
-
-    if(!results) {
-      res.status(404);
-      return res.render('error', { title:'Error', message:'No user found' });
-    }
-
-    res.status(200);
-    return res.render('home', { title:'Home', message:`User: ${results.username}` });
-
+  // ROOT URL
+  router.get('/', function(req, res) {
+    res.render('index', { title: 'RESTFull API - Express' });
   });
-});
 
-module.exports = router;
+  router.get('/api', function(req, res) {
+    res.render('index', { title: 'RESTFull API - Express' });
+  });
+
+  // LOGIN GET && POST
+  router.get('/login', function(req, res) {
+    res.render('login', null);
+  });
+
+  router.post('/login', passport.authenticate('login', {
+		successRedirect: '/api/home',
+		failureRedirect: '/',
+		failureFlash : true
+	}));
+
+  // SINGUP GET && POST
+  router.get('/signup', function(req, res) {
+    res.render('register', { message: req.flash('message')})
+  });
+
+  router.post('/signup', passport.authenticate('signup', {
+		successRedirect: '/api/home',
+		failureRedirect: '/signup',
+		failureFlash : true
+	}));
+
+  router.get('/signout', function(req, res) {
+		req.logout();
+		res.redirect('/');
+	});
+
+  return router;
+}

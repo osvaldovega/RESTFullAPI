@@ -2,13 +2,29 @@ const express           = require('express');
 const router            = express.Router();
 const controllers       = require('../controllers');
 
+// Authentication Func
+function isAuthenticated(req, res, next) {
+  // if user is authenticated in the session, call the next() to call the next request handler
+	// Passport adds this method to request object. A middleware is allowed to add properties to
+	// request and response objects
+  if (req.isAuthenticated()) {
+    return next();
+  }
+
+  res.redirect('/');
+}
+
+// GET route to add a new user/part form
+router.get('/home', isAuthenticated, function(req, res) {
+  res.render('home', { title: 'Welcome', message: 'This is your home page'});
+});
 
 // -------------------------------------------------------- //
 // FOR PARTSSCHEMA
 // METHOD: GET
 // OPTIONS: Get All records
 // -------------------------------------------------------- //
-router.get('/:resource', function(req, res, next) {
+router.get('/:resource', isAuthenticated, function(req, res, next) {
   const resource = req.params.resource;
   const controller = controllers[resource];
 
@@ -42,7 +58,7 @@ router.get('/:resource', function(req, res, next) {
 // METHOD: GET
 // OPTIONS: USING ID
 // -------------------------------------------------------- //
-router.get('/:resource/:id', function(req, res, next) {
+router.get('/:resource/:id', isAuthenticated, function(req, res, next) {
   const resource = req.params.resource;
   const id = req.params.id;
   const controller = controllers[resource];
@@ -77,7 +93,7 @@ router.get('/:resource/:id', function(req, res, next) {
 // METHOD: POST
 // OPTIONS: Add New record
 // -------------------------------------------------------- //
-router.post('/:resource/', function(req, res, next) {
+router.post('/:resource/', isAuthenticated, function(req, res, next) {
   const resource = req.params.resource;
   const controller = controllers[resource];
 
@@ -111,7 +127,7 @@ router.post('/:resource/', function(req, res, next) {
 // METHOD: PUT
 // OPTIONS: Update a record
 // -------------------------------------------------------- //
-router.put('/:resource/:id', function(req, res, next) {
+router.put('/:resource/:id', isAuthenticated, function(req, res, next) {
   const resource = req.params.resource;
   const controller = controllers[resource];
 
@@ -145,7 +161,7 @@ router.put('/:resource/:id', function(req, res, next) {
 // METHOD: DELETE
 // OPTIONS: Delete a record
 // -------------------------------------------------------- //
-router.delete('/:resource/:id', function(req, res, next) {
+router.delete('/:resource/:id', isAuthenticated, function(req, res, next) {
   const resource = req.params.resource;
   const controller = controllers[resource];
 
@@ -172,6 +188,17 @@ router.delete('/:resource/:id', function(req, res, next) {
       resource: result
     });
   });
+});
+
+// GET route to add a new user/part form
+router.get('/:resource/add', isAuthenticated, function(req, res) {
+  const resource = req.params.resource;
+
+  if(resource === 'users') {
+    res.render('adduser', null);
+  }
+
+  res.render('addpart', null);
 });
 
 module.exports = router;

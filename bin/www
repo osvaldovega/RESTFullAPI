@@ -1,0 +1,10 @@
+#!/usr/bin/env node
+const debug = require('debug')('rest_api');
+const app = require('../server');
+
+// START THE SERVER
+const port = app.get('port');
+app.listen(port, function() {
+  debug(`Server is up and running...\nPort: ${port}\nURL: localhost:${port}/`);
+  console.log(`Server is up and running...\nPort: ${port}\nURL: localhost:${port}/`);
+});

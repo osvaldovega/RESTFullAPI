@@ -5,7 +5,9 @@
     <title>{{title}}</title>
   </head>
   <body>
-    <h2>{{message}}</h2>
+    <h1>{{message}}</h1>
+    <h2>{{error.status}}</h2>
+    <pre>{{error.stack}}</pre>
     <a href='/'>Main page</a>
   </body>
 </html>

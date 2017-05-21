@@ -1,27 +1,31 @@
 const express         = require('express');
+const mongoose        = require('mongoose');
 const path            = require('path');
 const bodyParser      = require('body-parser');
 const favicon         = require('serve-favicon');
 const logger          = require('morgan');
 const cookieParser    = require('cookie-parser');
-const mongoose        = require('mongoose');
-const sessions        = require('express-session');
+const expressSession  = require('express-session');
+const passport        = require('passport');
+const flash           = require('connect-flash');
 // Routes
-const index           = require('./routes/index');
+const index           = require('./routes/index')(passport);
 const api             = require('./routes/api');
 // Server variables
 const config          = require('./config/config');
+const port            = config.port;
+const secretKey       = config.passport.secretKey;
+const initPassport    = require('./passport/init');
 const app             = express();
-const port            = config.port || 3000;
 
 
 
 // Connect to Mongo DB - (store)
-mongoose.connect(config.database.path, function(err, res) {
+mongoose.connect(config.database.url, function(err, res) {
   if (err) {
     console.log(`DB CONNECTION FAILED: ${err}`);
   } else {
-    console.log(`DB CONNECTION SUCCESS: ${config.database.path}`);
+    console.log(`DB CONNECTION SUCCESS: ${config.database.url}`);
   }
 });
 
@@ -29,19 +33,26 @@ mongoose.connect(config.database.path, function(err, res) {
 // View engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hjs');
+app.set('port', port || 3000);
 
 // uncomment after placing your favicon in /public
-// app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'public/img/icons', 'favicon.png')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(sessions({
-  secret: '#$/%&sdfsdf4556ASD!#84df&%/',
-  resave: false,
-  saveUninitialized: true
-}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Passport security
+app.use(expressSession({ secret: secretKey, resave: false, saveUninitialized: true }));
+app.use(passport.initialize());
+app.use(passport.session());
+
+// FLASH middleware is used to store messages in session and then display messages in templates
+app.use(flash());
+
+// Passport INITIALIZE
+initPassport(passport);
 
 // Define routes
 app.use(index);
@@ -54,18 +65,16 @@ app.use(function(req, res, next) {
   next(err);
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+// development error handler
+// will print stacktrace
+if (app.get('env') === 'development') {
+    app.use(function(err, req, res, next) {
+        res.status(err.status || 500);
+        res.render('error', {
+            message: err.message,
+            error: err
+        });
+    });
+}
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
-
-// START THE SERVER
-app.listen(port, function() {
-  console.log(`Server is up and running...\nPort: ${port}\nURL: localhost:${port}/`);
-});
+module.exports = app;

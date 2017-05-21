@@ -1,6 +1,9 @@
 module.exports = {
   'database': {
-    path: 'mongodb://localhost/store'
+    url: 'mongodb://localhost/store'
   },
-  'port': 8081
+  'port': 8081,
+  'passport': {
+    secretKey: 'Th1sIsMyS3cr3tK1y'
+  }
 };

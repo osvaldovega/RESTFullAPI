@@ -4,6 +4,5 @@ const LoginController = require('./LoginController');
 
 module.exports = {
   users: UsersController,
-  parts: PartsController,
-  login: LoginController
+  parts: PartsController
 }
